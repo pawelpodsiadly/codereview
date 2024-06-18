@@ -1,4 +1,4 @@
-public class SmtpEmailSender : IEmailSender
+public class SmtpEmailSender
 {
     private readonly SmtpClient smtpClient;
 
@@ -15,7 +15,7 @@ public class SmtpEmailSender : IEmailSender
         };
     }
 
-    public async Task SendEmailAsync(string from, string to, string subject, string body)
+    public void SendEmail(string from, string to, string subject, string body)
     {
         if (string.IsNullOrWhiteSpace(from)) throw new ArgumentNullException(nameof(from));
         if (string.IsNullOrWhiteSpace(to)) throw new ArgumentNullException(nameof(to));
@@ -23,6 +23,8 @@ public class SmtpEmailSender : IEmailSender
         if (string.IsNullOrWhiteSpace(body)) throw new ArgumentNullException(nameof(body));
 
         var mailMessage = new MailMessage(from, to, subject, body);
-        await smtpClient.SendMailAsync(mailMessage);
+
+        // Call the async method and wait for it to complete
+        SendEmailAsync(mailMessage).Wait();
     }
 }
