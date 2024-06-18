@@ -1,0 +1,33 @@
+public class DatabaseAccess
+{
+    private readonly string connectionString;
+
+    public DatabaseAccess(string connectionString)
+    {
+        if (string.IsNullOrWhiteSpace(connectionString))
+        {
+            throw new ArgumentNullException(nameof(connectionString));
+        }
+
+        this.connectionString = connectionString;
+    }
+
+    public void ExecuteQuery(string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            throw new ArgumentNullException(nameof(query));
+        }
+
+        SqlConnection connection = new SqlConnection(connectionString);
+        SqlCommand command = new SqlCommand(query, connection);
+
+        connection.Open();
+        SqlDataReader reader = command.ExecuteReader();
+
+        while (reader.Read())
+        {
+            Console.WriteLine(reader[0].ToString());
+        }      
+    }
+}
